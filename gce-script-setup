@@ -1,0 +1,48 @@
+#!/bin/bash
+# GCE setup script for bioinformatics
+# Using Ubuntu 16.04 LTS as a starting point
+
+# Update system
+apt-get update
+
+# Install Anaconda
+cd /tmp
+curl -O https://repo.continuum.io/archive/Anaconda3-5.0.1-Linux-x86_64.sh
+sha256sum Anaconda3-5.0.1-Linux-x86_64.sh
+bash Anaconda3-5.0.1-Linux-x86_64.sh
+source ~/.bashrc
+
+# Create environment in Conda and activate it
+conda create --name BioSandbox python=3.6
+source activate BioSandbox
+
+# Setup channels for conda-package manager to use bioconda
+conda config --add channels r
+conda config --add channels defaults
+conda config --add channels conda-forge
+conda config --add channels bioconda
+
+# Install Conda-packages for bioinformatics
+conda install fastqc # Install FastQC - Quality Control of Reads
+sudo apt-get install ttf-dejavu # Get fonts for FastQC
+conda install spades # Install SPAdes assembler
+conda install bwa # Install Burrows-Wheeler Aligner
+
+# Analyse some example E. coli data 
+
+# Set up folders
+mkdir ~/data
+mkdir ~/data/comparison_tut
+cd ~/data/comparison_tut
+
+# Get E. coli genome sequence data (https://www.ebi.ac.uk/ena/data/view/SRR292770&display=html)
+wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR292/SRR292770/SRR292770_1.fastq.gz
+wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR292/SRR292770/SRR292770_2.fastq.gz
+
+# Quality Control of Reads
+mkdir fastqc
+fastqc SRR292770_1.fastq.gz SRR292770_2.fastq.gz --outdir fastqc
+
+# Assemble with SPAdes
+mkdir spadesoutput
+nohup spades -1 SRR292770_1.fastq.gz -2 SRR292770_2.fastq.gz -o spadesoutput & > spades.out 2 > spades.err < /dev/null &
