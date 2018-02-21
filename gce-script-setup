@@ -45,4 +45,4 @@ fastqc SRR292770_1.fastq.gz SRR292770_2.fastq.gz --outdir fastqc
 
 # Assemble with SPAdes
 mkdir spadesoutput
-nohup spades -1 SRR292770_1.fastq.gz -2 SRR292770_2.fastq.gz -o spadesoutput & > spades.out 2 > spades.err < /dev/null &
+nohup spades.py -1 SRR292770_1.fastq.gz -2 SRR292770_2.fastq.gz -o spadesoutput > spades.out 2> spades.err </dev/null &
