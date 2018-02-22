@@ -1,18 +1,21 @@
 # Analyse some example E. coli data 
 
-# Set up folders
+## Set up folders
 mkdir ~/data
 mkdir ~/data/comparison_tut
 cd ~/data/comparison_tut
 
-# Get E. coli genome sequence data (https://www.ebi.ac.uk/ena/data/view/SRR292770&display=html)
+## Get E. coli genome sequence data (https://www.ebi.ac.uk/ena/data/view/SRR292770&display=html)
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR292/SRR292770/SRR292770_1.fastq.gz
 wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR292/SRR292770/SRR292770_2.fastq.gz
 
-# Quality Control of Reads
+## Quality Control of Reads
 mkdir fastqc
 fastqc SRR292770_1.fastq.gz SRR292770_2.fastq.gz --outdir fastqc
 
-# Assemble with SPAdes
+## Assemble with SPAdes
 mkdir spadesoutput
-nohup spades.py -1 SRR292770_1.fastq.gz -2 SRR292770_2.fastq.gz -o spadesoutput > spades.out 2 > spades.err </dev/null &
+nohup spades.py -1 SRR292770_1.fastq.gz -2 SRR292770_2.fastq.gz -o spadesoutput > spades.out 2> spades.err </dev/null &
+
+## Get reference genome
+wget ftp://ftp.ncbi.nih.gov/genomes/archive/old_refseq/Bacteria/Escherichia_coli_55989_uid59383/NC_011748.fna
