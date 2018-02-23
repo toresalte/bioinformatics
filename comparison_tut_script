@@ -17,5 +17,15 @@ fastqc SRR292770_1.fastq.gz SRR292770_2.fastq.gz --outdir fastqc
 mkdir spadesoutput
 nohup spades.py -1 SRR292770_1.fastq.gz -2 SRR292770_2.fastq.gz -o spadesoutput > spades.out 2> spades.err </dev/null &
 
-## Get reference genome
+## Alignment
+mkdir alignment
+cd alignment
+
+### Get reference genome
 wget ftp://ftp.ncbi.nih.gov/genomes/archive/old_refseq/Bacteria/Escherichia_coli_55989_uid59383/NC_011748.fna
+
+### Perform alignment with MUMmer (nucmer) - DRAFT
+nucmer --prefix=ref_qry NC_011748.fna ~/data/comparison_tut/spadesoutput/qry.fasta
+show-coords -rcl ref_qry.delta > ref_qry.coords
+show-aligns ref_qry.delta refname qryname > ref_qry.aligns
+show-tiling ref_qry.delta > ref_qry.tiling
