@@ -1,0 +1,46 @@
+#!/bin/bash
+
+# Reanalysis of TB sequences from Casali et al 2014. Samara, Russia
+# For training purposes in MTB bioinformatics
+
+# Get a couple of sequences from NCBI Samara Project Russia
+
+# Download Sample ERX450566 Run ERR484734 -  This submission includes reads tagged with the sequence CTTGTACT.
+fastq-dump -I --split-files ERR484734 --gzip
+
+# Download Sample ERX450565 Run ERR484733 -  This submission includes reads tagged with the sequence GGCTACAG.
+fastq-dump -I --split-files ERR484733 --gzip
+
+# Download Sample ERX369685 Run ERR403324 -  This submission includes reads tagged with the sequence GGCTACAG.
+fastq-dump -I --split-files ERR403324 --gzip
+
+# Download H37Rv-RefSeq from NCBI RefSeq
+curl -o MTBH37Rv.fa ""
+
+# Run Trimmomatic (bioconda-script-version)
+
+genomes = 'ERR484734 ERR484733 ERR403324'
+
+for genome in $genomes
+do 
+   trimmomatic PE -phred33 \
+      $name+"_1.fastq.gz" ERR484734_2.fastq.gz \
+      trim/ERR484734_1_paired.fastq.gz trim/ERR484734_1_unpaired.fastq.gz \
+      trim/ERR484734_2_paired.fastq.gz trim/ERR484734_2_unpaired.fastq.gz \
+      ILLUMINACLIP:TruSeq3-PE-2.fa:2:30:10 LEADING:3 \
+      TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36 &
+done
+
+trimmomatic PE -phred33 \
+   ERR484733_1.fastq.gz ERR484733_2.fastq.gz \
+   trim/ERR484733_1_paired.fastq.gz trim/ERR484733_1_unpaired.fastq.gz \
+   trim/ERR484733_2_paired.fastq.gz trim/ERR484733_2_unpaired.fastq.gz \
+   ILLUMINACLIP:TruSeq3-PE-2.fa:2:30:10 LEADING:3 \
+   TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36 &
+   
+trimmomatic PE -phred33 \
+   ERR403324_1.fastq.gz ERR403324_2.fastq.gz \
+   trim/ERR403324_1_paired.fastq.gz trim/ERR403324_1_unpaired.fastq.gz \
+   trim/ERR403324_2_paired.fastq.gz trim/ERR403324_2_unpaired.fastq.gz \
+   ILLUMINACLIP:TruSeq3-PE-2.fa:2:30:10 LEADING:3 \
+   TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36 &
