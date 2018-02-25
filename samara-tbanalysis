@@ -44,3 +44,5 @@ trimmomatic PE -phred33 \
    trim/ERR403324_2_paired.fastq.gz trim/ERR403324_2_unpaired.fastq.gz \
    ILLUMINACLIP:TruSeq3-PE-2.fa:2:30:10 LEADING:3 \
    TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:36 &
+
+bwa mem MTBH37Rv.fa ~/data/TBC/Samara/trim/ERR484733_1_paired.fq ~/data/TBC/Samara/trim/ERR484733_2_paired.fastq.gz > aln-pe.sam
